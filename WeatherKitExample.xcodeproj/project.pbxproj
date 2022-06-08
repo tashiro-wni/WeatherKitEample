@@ -14,6 +14,7 @@
 		F9F084CF28503CC800E5907F /* WeatherKitExampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F084CE28503CC800E5907F /* WeatherKitExampleTests.swift */; };
 		F9F084D928503CC900E5907F /* WeatherKitExampleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F084D828503CC900E5907F /* WeatherKitExampleUITests.swift */; };
 		F9F084DB28503CC900E5907F /* WeatherKitExampleUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F084DA28503CC900E5907F /* WeatherKitExampleUITestsLaunchTests.swift */; };
+		F9F084E928503D1700E5907F /* WeatherModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F084E828503D1700E5907F /* WeatherModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +45,8 @@
 		F9F084D428503CC900E5907F /* WeatherKitExampleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WeatherKitExampleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F9F084D828503CC900E5907F /* WeatherKitExampleUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherKitExampleUITests.swift; sourceTree = "<group>"; };
 		F9F084DA28503CC900E5907F /* WeatherKitExampleUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherKitExampleUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		F9F084E728503CEC00E5907F /* WeatherKitExample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WeatherKitExample.entitlements; sourceTree = "<group>"; };
+		F9F084E828503D1700E5907F /* WeatherModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,8 +97,10 @@
 		F9F084BC28503CC700E5907F /* WeatherKitExample */ = {
 			isa = PBXGroup;
 			children = (
+				F9F084E728503CEC00E5907F /* WeatherKitExample.entitlements */,
 				F9F084BD28503CC700E5907F /* WeatherKitExampleApp.swift */,
 				F9F084BF28503CC700E5907F /* ContentView.swift */,
+				F9F084E828503D1700E5907F /* WeatherModel.swift */,
 				F9F084C128503CC800E5907F /* Assets.xcassets */,
 				F9F084C328503CC800E5907F /* Preview Content */,
 			);
@@ -258,6 +263,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F9F084C028503CC700E5907F /* ContentView.swift in Sources */,
+				F9F084E928503D1700E5907F /* WeatherModel.swift in Sources */,
 				F9F084BE28503CC700E5907F /* WeatherKitExampleApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -414,6 +420,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = WeatherKitExample/WeatherKitExample.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"WeatherKitExample/Preview Content\"";
@@ -443,6 +450,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = WeatherKitExample/WeatherKitExample.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"WeatherKitExample/Preview Content\"";
