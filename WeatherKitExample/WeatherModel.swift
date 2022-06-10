@@ -22,8 +22,7 @@ class WeatherModel: ObservableObject {
     func load() {
         Task {
             do {
-                let weatherService = WeatherService()
-                self.weather = try await weatherService.weather(for: location)
+                self.weather = try await WeatherService().weather(for: location)
             } catch {
                 self.hasError = true
             }

@@ -37,10 +37,12 @@ struct ContentView: View {
     var body: some View {
         VStack(alignment: .leading) {
             if let weather = model.weather {
-                ScrollView {
-                    CurrentWeatherView(current: weather.currentWeather)
-                    Divider()
-                    HourlyWeatherView(hourlyForecast: weather.hourlyForecast)
+                GeometryReader { geometry in
+                    ScrollView {
+                        CurrentWeatherView(current: weather.currentWeather)
+                        Divider()
+                        HourlyWeatherView(hourlyForecast: weather.hourlyForecast, width: geometry.size.width)
+                    }
                 }
             } else {
                 Text("Loading...")
@@ -54,6 +56,7 @@ struct ContentView: View {
     }
 }
 
+// 現在の天気
 struct CurrentWeatherView: View {
     let current: CurrentWeather
 
@@ -87,8 +90,14 @@ struct CurrentWeatherView: View {
     }
 }
 
+// 1時間ごと
 struct HourlyWeatherView: View {
     let hourlyForecast: Forecast<HourWeather>
+    let width: CGFloat
+
+    private var hasWideWidth: Bool {
+        width > 400
+    }
 
     private let dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
@@ -101,7 +110,9 @@ struct HourlyWeatherView: View {
 
     var body: some View {
         VStack() {
-            if !hourlyForecast.forecast.isEmpty {
+            if hourlyForecast.forecast.isEmpty {
+                EmptyView()
+            } else {
                 Text("1時間ごとの天気")
                     .font(.title)
                     .frame(alignment: .center)
@@ -114,23 +125,28 @@ struct HourlyWeatherView: View {
                         Text("気温")
                         Text("降水\n確率")
                         Text("風向風速")
-                        //Text("湿度")
+                        if hasWideWidth {
+                            Text("湿度")
+                            Text("気圧")
+                        }
                     }
 
                     ForEach(hourlyForecast.startIndex ..< hourlyForecast.endIndex, id: \.self) { index in
+                        let item = hourlyForecast[index]
                         GridRow() {
-                            Text(dateFormatter.string(from: hourlyForecast[index].date))
-                            Image(systemName: hourlyForecast[index].symbolName)
-                            Text(String(format: "%.1f%@", hourlyForecast[index].temperature.value, hourlyForecast[index].temperature.unit.symbol))
-                            Text(String(format: "%.0f%@", hourlyForecast[index].precipitationChance * 100, "%"))
-                            Text(String(format: "%@ %.1f%@", hourlyForecast[index].wind.compassDirection.directionText, hourlyForecast[index].wind.speed.value, hourlyForecast[index].wind.speed.unit.symbol))
-                            //Text(String(format: "%.0f%@", hourlyForecast[index].humidity * 100, "%"))
+                            Text(dateFormatter.string(from: item.date))
+                            Image(systemName: item.symbolName)
+                            Text(String(format: "%.1f%@", item.temperature.value, item.temperature.unit.symbol))
+                            Text(String(format: "%.0f%@", item.precipitationChance * 100, "%"))
+                            Text(String(format: "%@ %.1f%@", item.wind.compassDirection.directionText, item.wind.speed.value, item.wind.speed.unit.symbol))
+                            if hasWideWidth {
+                                Text(String(format: "%.0f%@", item.humidity * 100, "%"))
+                                Text(String(format: "%.1f%@", item.pressure.value, item.pressure.unit.symbol))
+                            }
                         }
                         .lineLimit(1)
                     }
                 }
-            } else {
-                EmptyView()
             }
         }
     }
