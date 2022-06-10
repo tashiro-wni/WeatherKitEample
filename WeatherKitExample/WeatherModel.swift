@@ -11,7 +11,8 @@ import WeatherKit
 
 @MainActor
 class WeatherModel: ObservableObject {
-    @Published private(set) var currentWeather: CurrentWeather?
+    let location = CLLocation(latitude: 35.6484764, longitude: 140.0397928)  // 海浜幕張
+    @Published private(set) var weather: Weather?
     @Published var hasError = false
 
     init() {
@@ -22,9 +23,7 @@ class WeatherModel: ObservableObject {
         Task {
             do {
                 let weatherService = WeatherService()
-                let location = CLLocation(latitude: 35.5, longitude: 140.1)
-                let weather = try await weatherService.weather(for: location)
-                self.currentWeather = weather.currentWeather
+                self.weather = try await weatherService.weather(for: location)
             } catch {
                 self.hasError = true
             }
