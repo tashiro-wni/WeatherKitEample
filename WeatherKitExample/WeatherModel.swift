@@ -30,33 +30,10 @@ final class WeatherModel: ObservableObject {
     }
 }
 
-extension Wind.CompassDirection {
-    var directionText: String {
-        switch self {
-        case .northNortheast: return "NNE"
-        case .northeast:      return "NE"
-        case .eastNortheast:  return "ENE"
-        case .east:           return "E"
-        case .eastSoutheast:  return "ESE"
-        case .southeast:      return "SE"
-        case .southSoutheast: return "SSE"
-        case .south:          return "S"
-        case .southSouthwest: return "SSW"
-        case .southwest:      return "SW"
-        case .westSouthwest:  return "WSW"
-        case .west:           return "W"
-        case .westNorthwest:  return "WNW"
-        case .northwest:      return "NW"
-        case .northNorthwest: return "NNW"
-        case .north:          return "N"
-        }
-    }
-}
-
 // 風向風速を「NNE 13km/h」のように整形する
 // FIXME: 単位は .converted(to: .metersPerSecond) で m/s に変換されるはずだが...
 extension Wind {
     var text: String {
-        compassDirection.directionText + " " + speed.converted(to: .metersPerSecond).formatted()
+        compassDirection.abbreviation + " " + speed.converted(to: .metersPerSecond).formatted()
     }
 }

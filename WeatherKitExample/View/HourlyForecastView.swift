@@ -56,7 +56,7 @@ struct HourlyForecastView: View {
                                         Text("\(item.humidity * 100, specifier: "%.0f%%")")
                                         Text(item.pressure.converted(to: .hectopascals).formatted())
                                         Text(item.visibility.formatted())
-                                        Text("\(item.cloudCover, specifier: "%.1f")")
+                                        Text("\(item.cloudCover * 10, specifier: "%.0f")")
                                         Text(item.uvIndex.value.formatted())
                                     }
                                 }

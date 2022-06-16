@@ -35,7 +35,7 @@ struct CurrentWeatherView: View {
             Text("気圧：" + current.pressure.converted(to: .hectopascals).formatted())
             Text("視程：" + current.visibility.formatted())
             Text("UV index：" + current.uvIndex.value.formatted())
-            Text(String(format: "雲量：%.1f", current.cloudCover))
+            Text(String(format: "雲量：%.0f", current.cloudCover * 10))
             Spacer()
         }
     }
