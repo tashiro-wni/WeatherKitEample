@@ -27,10 +27,10 @@ struct CurrentWeatherView: View {
             Text("日時：" + dateFormatter.string(from: current.date))
             HStack {
                 Text("天気：" + current.condition.description)
-                Image(systemName: current.symbolName)
+                Image(systemName: current.symbolName)  // 天気アイコン
             }
             Text("気温：" + current.temperature.formatted())
-            Text("風向風速：" + current.wind.compassDirection.directionText + " " + current.wind.speed.converted(to: .metersPerSecond).formatted())
+            Text("風向風速：" + current.wind.text)
             Text("湿度：\(current.humidity * 100, specifier: "%.0f%%")")
             Text("気圧：" + current.pressure.converted(to: .hectopascals).formatted())
             Text("視程：" + current.visibility.formatted())

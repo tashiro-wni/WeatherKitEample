@@ -44,15 +44,14 @@ struct HourlyForecastView: View {
                             }
                         }.bold()
 
-                        ForEach(hourlyForecast.startIndex ..< hourlyForecast.endIndex, id: \.self) { index in
-                            let item = hourlyForecast[index]
+                        ForEach(hourlyForecast, id: \.date) { item in
                             if item.date > now {
                                 GridRow() {
                                     Text(dateFormatter.string(from: item.date))
-                                    Image(systemName: item.symbolName)
+                                    Image(systemName: item.symbolName)  // 天気アイコン
                                     Text(item.temperature.formatted())
                                     Text("\(item.precipitationChance * 100, specifier: "%.0f%%")")
-                                    Text(item.wind.compassDirection.directionText + " " + item.wind.speed.converted(to: .metersPerSecond).formatted())
+                                    Text(item.wind.text)
                                     if geometry.size.width > 400 {
                                         Text("\(item.humidity * 100, specifier: "%.0f%%")")
                                         Text(item.pressure.converted(to: .hectopascals).formatted())
