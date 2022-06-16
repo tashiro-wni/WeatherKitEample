@@ -30,9 +30,10 @@ struct CurrentWeatherView: View {
                 Image(systemName: current.symbolName)
             }
             Text("気温：" + current.temperature.formatted())
-            Text("風向風速：" + current.wind.compassDirection.directionText + " " + current.wind.speed.formatted())
-            Text(String(format: "湿度：%.0f%@", current.humidity * 100, "%"))
-            Text("気圧：" + current.pressure.formatted())
+            Text("風向風速：" + current.wind.compassDirection.directionText + " " + current.wind.speed.converted(to: .metersPerSecond).formatted())
+            Text("湿度：\(current.humidity * 100, specifier: "%.0f%%")")
+            Text("気圧：" + current.pressure.converted(to: .hectopascals).formatted())
+            Text("視程：" + current.visibility.formatted())
             Text("UV index：" + current.uvIndex.value.formatted())
             Text(String(format: "雲量：%.1f", current.cloudCover))
             Spacer()

@@ -8,7 +8,7 @@
 import SwiftUI
 import WeatherKit
 
-// 1時間ごと
+// 1時間ごとの天気
 struct HourlyForecastView: View {
     let hourlyForecast: Forecast<HourWeather>
 
@@ -20,46 +20,53 @@ struct HourlyForecastView: View {
         dateFormatter.timeZone = TimeZone(identifier: "JST")
         return dateFormatter
     }()
+    private let now = Date()
 
     var body: some View {
-        GeometryReader { geometry in
-            ScrollView {
-                VStack() {
-                    if hourlyForecast.forecast.isEmpty {
-                        Text("データがありません")
-                    } else {
-                        Grid(alignment: .trailing) {
-                            GridRow() {
-                                Text("時刻")
-                                Text("天気")
-                                Text("気温")
-                                Text("降水\n確率")
-                                Text("風向風速")
-                                if geometry.size.width > 400 {
-                                    Text("湿度")
-                                    Text("気圧")
-                                }
+        GeometryReader() { geometry in
+            ScrollView() {
+                if hourlyForecast.forecast.isEmpty {
+                    Text("データがありません")
+                } else {
+                    Grid(alignment: .trailing) {
+                        GridRow() {
+                            Text("時刻")
+                            Text("天気")
+                            Text("気温")
+                            Text("降水\n確率")
+                            Text("風向風速")
+                            if geometry.size.width > 400 {
+                                Text("湿度")
+                                Text("気圧")
+                                Text("視程")
+                                Text("雲量")
+                                Text("UV\nindex")
                             }
+                        }.bold()
 
-                            ForEach(hourlyForecast.startIndex ..< hourlyForecast.endIndex, id: \.self) { index in
-                                let item = hourlyForecast[index]
+                        ForEach(hourlyForecast.startIndex ..< hourlyForecast.endIndex, id: \.self) { index in
+                            let item = hourlyForecast[index]
+                            if item.date > now {
                                 GridRow() {
                                     Text(dateFormatter.string(from: item.date))
                                     Image(systemName: item.symbolName)
                                     Text(item.temperature.formatted())
-                                    Text(String(format: "%.0f%@", item.precipitationChance * 100, "%"))
-                                    Text(item.wind.compassDirection.directionText + " " + item.wind.speed.formatted())
+                                    Text("\(item.precipitationChance * 100, specifier: "%.0f%%")")
+                                    Text(item.wind.compassDirection.directionText + " " + item.wind.speed.converted(to: .metersPerSecond).formatted())
                                     if geometry.size.width > 400 {
-                                        Text(String(format: "%.0f%@", item.humidity * 100, "%"))
-                                        Text(item.pressure.formatted())
+                                        Text("\(item.humidity * 100, specifier: "%.0f%%")")
+                                        Text(item.pressure.converted(to: .hectopascals).formatted())
+                                        Text(item.visibility.formatted())
+                                        Text("\(item.cloudCover, specifier: "%.1f")")
+                                        Text(item.uvIndex.value.formatted())
                                     }
                                 }
                                 .lineLimit(1)
                             }
                         }
                     }
+                    .padding(20)
                 }
-                .padding(20)
             }
         }
     }

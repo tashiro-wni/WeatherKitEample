@@ -31,7 +31,6 @@ struct ContentView: View {
                         ) {
                             Text("週間予報")
                         }
-
                     }
                 }
             } else {

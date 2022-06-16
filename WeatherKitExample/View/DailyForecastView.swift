@@ -8,12 +8,13 @@
 import SwiftUI
 import WeatherKit
 
+// 週間予報
 struct DailyForecastView: View {
     let dailyForecast: Forecast<DayWeather>
 
     private let dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "M/d"
+        dateFormatter.dateFormat = "M/d(E)"
         dateFormatter.calendar = Calendar(identifier: .gregorian)
         dateFormatter.locale = Locale(identifier: "ja_JP")
         dateFormatter.timeZone = TimeZone(identifier: "JST")
@@ -21,8 +22,8 @@ struct DailyForecastView: View {
     }()
 
     var body: some View {
-        GeometryReader { geometry in
-            ScrollView {
+        GeometryReader() { geometry in
+            ScrollView() {
                 VStack() {
                     if dailyForecast.forecast.isEmpty {
                         Text("データがありません")
@@ -34,10 +35,8 @@ struct DailyForecastView: View {
                                 Text("最高\n気温")
                                 Text("最低\n気温")
                                 Text("降水\n確率")
-                                //if geometry.size.width > 400 {
-                                    Text("風向風速")
-                                //}
-                            }
+                                Text("風向風速")
+                            }.bold()
 
                             ForEach(dailyForecast.startIndex ..< dailyForecast.endIndex, id: \.self) { index in
                                 let item = dailyForecast[index]
@@ -46,10 +45,8 @@ struct DailyForecastView: View {
                                     Image(systemName: item.symbolName)
                                     Text(item.highTemperature.formatted())
                                     Text(item.lowTemperature.formatted())
-                                    Text(String(format: "%.0f%@", item.precipitationChance * 100, "%"))
-                                    //if geometry.size.width > 400 {
-                                        Text(item.wind.compassDirection.directionText + " " + item.wind.speed.formatted())
-                                    //}
+                                    Text("\(item.precipitationChance * 100, specifier: "%.0f%%")")
+                                    Text(item.wind.compassDirection.directionText + " " + item.wind.speed.formatted())
                                 }
                                 .lineLimit(1)
                             }
