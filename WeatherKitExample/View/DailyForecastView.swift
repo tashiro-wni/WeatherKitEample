@@ -17,72 +17,90 @@ struct DailyForecastView: View {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "M/d(E)"
         dateFormatter.calendar = Calendar(identifier: .gregorian)
-        dateFormatter.locale = Locale(identifier: "ja_JP")
-        dateFormatter.timeZone = TimeZone(identifier: "JST")
+        dateFormatter.locale = .ja_JP
+        dateFormatter.timeZone = .jst
         return dateFormatter
     }()
 
     var body: some View {
-        GeometryReader() { geometry in
-            ScrollView() {
-                VStack(spacing: 20) {
-                    if dailyForecast.forecast.isEmpty {
-                        Text("データがありません")
-                    } else {
-                        // 気温グラフ
-                        Text("気温").bold()
-                        Chart {
-                            ForEach(dailyForecast, id: \.date) { item in
-                                // 最高気温、最低気温
-                                BarMark(
-                                    x: .value("日付", dateFormatter.string(from: item.date)),
-                                    yStart: .value("最低気温", item.lowTemperature.value),
-                                    yEnd: .value("最高気温", item.highTemperature.value),
-                                    width: .ratio(0.6)
-                                )
-                                .foregroundStyle(.red)
-                                .opacity(0.3)
-
-                                // 平均値
-                                RectangleMark(
-                                    x: .value("日付", dateFormatter.string(from: item.date)),
-                                    y: .value("平均気温", (item.highTemperature.value + item.lowTemperature.value) / 2),
-                                    width: .ratio(0.6),
-                                    height: .fixed(2)
-                                )
-                                .foregroundStyle(.red)
-                            }
-                        }.frame(width: geometry.size.width - 40, height: 200)
-
-                        Divider()
-
-                        // 表
-                        Grid(alignment: .trailing) {
-                            GridRow() {
-                                Text("時刻")
-                                Text("天気")
-                                Text("最高\n気温")
-                                Text("最低\n気温")
-                                Text("降水\n確率")
-                                Text("風向風速")
-                            }.bold()
-
-                            ForEach(dailyForecast, id: \.date) { item in
-                                GridRow() {
-                                    Text(dateFormatter.string(from: item.date))
-                                    Image(systemName: item.symbolName)  // 天気アイコン
-                                    Text(item.highTemperature.formatted())
-                                    Text(item.lowTemperature.formatted())
-                                    Text("\(item.precipitationChance * 100, specifier: "%.0f%%")")
-                                    Text(item.wind.text)
-                                }
-                                .lineLimit(1)
-                            }
+        ScrollView() {
+            if dailyForecast.isEmpty {
+                Text("データがありません")
+            } else {
+                // グラフ
+                Text("気温").bold()
+                DailyChartView(dailyForecast: dailyForecast)
+                    .frame(height: 200)
+                    .padding(20)
+                Divider()
+                        
+                // 表
+                Grid(alignment: .trailing) {
+                    GridRow() {
+                        Text("日付")
+                        Text("天気")
+                        Text("最高\n気温")
+                        Text("最低\n気温")
+                        Text("降水\n確率")
+                        Text("風向風速")
+                    }.bold()
+                    
+                    ForEach(dailyForecast, id: \.date) { item in
+                        GridRow() {
+                            Text(dateFormatter.string(from: item.date))
+                            Image(systemName: item.symbolName)  // 天気アイコン
+                            Text(item.highTemperature.formatted())
+                            Text(item.lowTemperature.formatted())
+                            Text("\(item.precipitationChance * 100, specifier: "%.0f%%")")
+                            Text(item.wind.text)
                         }
+                        .lineLimit(1)
                     }
                 }
-                .padding(20)
             }
+        }
+    }
+}
+
+private struct DailyChartView: View {
+    let dailyForecast: Forecast<DayWeather>
+    
+    var body: some View {
+        if let min = dailyForecast.map({ $0.lowTemperature.value }).min(),
+           let max = dailyForecast.map({ $0.highTemperature.value }).max() {
+            // 気温グラフ
+            Chart(dailyForecast, id: \.date) { item in
+                // 最高気温、最低気温
+                BarMark(
+                    x: .value("日付", item.date, unit: .day),
+                    yStart: .value("最低気温", item.lowTemperature.value),
+                    yEnd: .value("最高気温", item.highTemperature.value),
+                    width: .ratio(0.6)
+                )
+                .foregroundStyle(.red)
+                .opacity(0.3)
+                
+                // 平均値
+                RectangleMark(
+                    x: .value("日付", item.date, unit: .day),
+                    y: .value("平均気温", (item.highTemperature.value + item.lowTemperature.value) / 2),
+                    width: .ratio(0.6),
+                    height: .fixed(2)
+                )
+                .foregroundStyle(.red)
+            }
+            .chartYScale(domain: min ... max)
+            .chartXAxis {  // X軸の表記を定義
+                AxisMarks(values: .stride(by: .day)) { value in
+                    AxisGridLine()
+                    AxisTick()
+                    // see Date.FormatStyle
+                    // https://developer.apple.com/documentation/foundation/date/formatstyle
+                    AxisValueLabel(format: .dateTime.day())
+                }
+            }
+        } else {
+            EmptyView()
         }
     }
 }

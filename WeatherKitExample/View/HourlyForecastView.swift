@@ -7,6 +7,7 @@
 
 import SwiftUI
 import WeatherKit
+import Charts
 
 // 1時間ごとの天気
 struct HourlyForecastView: View {
@@ -16,8 +17,8 @@ struct HourlyForecastView: View {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "M/d H:mm"
         dateFormatter.calendar = Calendar(identifier: .gregorian)
-        dateFormatter.locale = Locale(identifier: "ja_JP")
-        dateFormatter.timeZone = TimeZone(identifier: "JST")
+        dateFormatter.locale = .ja_JP
+        dateFormatter.timeZone = .jst
         return dateFormatter
     }()
     private let now = Date()
@@ -28,6 +29,14 @@ struct HourlyForecastView: View {
                 if hourlyForecast.forecast.isEmpty {
                     Text("データがありません")
                 } else {
+                    // グラフ
+                    Text("気温").bold()
+                    HourlyChartView(hourlyForecast: hourlyForecast)
+                        .frame(height: 200)
+                        .padding(20)
+                    Divider()
+
+                    // 表
                     Grid(alignment: .trailing) {
                         GridRow() {
                             Text("時刻")
@@ -67,6 +76,39 @@ struct HourlyForecastView: View {
                     .padding(20)
                 }
             }
+        }
+    }
+}
+
+private struct HourlyChartView: View {
+    let hourlyForecast: Forecast<HourWeather>
+    private let now = Date()
+    
+    var body: some View {
+        if let min = hourlyForecast.map({ $0.temperature.value }).min(),
+           let max = hourlyForecast.map({ $0.temperature.value }).max() {
+            // 気温グラフ
+            Chart(hourlyForecast, id: \.date) { item in
+                if item.date > now {
+                    LineMark(
+                        x: .value("時刻", item.date, unit: .hour),
+                        y: .value("気温", item.temperature.value)
+                    )
+                    .foregroundStyle(.red)
+                }
+            }
+            .chartYScale(domain: min ... max)
+            .chartXAxis {  // X軸の表記を定義
+                AxisMarks(values: .stride(by: .day)) { _ in
+                    AxisGridLine()
+                    AxisTick()
+                    // see Date.FormatStyle
+                    // https://developer.apple.com/documentation/foundation/date/formatstyle
+                    AxisValueLabel(format: .dateTime.day())
+                }
+            }
+        } else {
+            EmptyView()
         }
     }
 }

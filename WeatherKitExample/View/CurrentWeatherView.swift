@@ -17,8 +17,8 @@ struct CurrentWeatherView: View {
         dateFormatter.dateStyle = .medium
         dateFormatter.timeStyle = .short
         dateFormatter.calendar = Calendar(identifier: .gregorian)
-        dateFormatter.locale = Locale(identifier: "ja_JP")
-        dateFormatter.timeZone = TimeZone(identifier: "JST")
+        dateFormatter.locale = .ja_JP
+        dateFormatter.timeZone = .jst
         return dateFormatter
     }()
 

@@ -30,10 +30,19 @@ final class WeatherModel: ObservableObject {
     }
 }
 
+extension Locale {
+    static let ja_JP = Locale(identifier: "ja_JP")
+}
+
+extension TimeZone {
+    static let jst = TimeZone(identifier: "JST")
+}
+
 // 風向風速を「NNE 13km/h」のように整形する
 // FIXME: 単位は .converted(to: .metersPerSecond) で m/s に変換されるはずだが...
 extension Wind {
     var text: String {
         compassDirection.abbreviation + " " + speed.converted(to: .metersPerSecond).formatted()
+        // speed.converted(to: .metersPerSecond).formatted(.measurement(width: .abbreviated).locale(Locale(identifier: "ja_JP")))
     }
 }

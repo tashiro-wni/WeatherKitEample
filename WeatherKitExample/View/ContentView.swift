@@ -9,6 +9,7 @@ import SwiftUI
 import WeatherKit
 
 struct ContentView: View {
+    @Environment(\.scenePhase) private var phase
     @StateObject var model = WeatherModel()
 
     var body: some View {
@@ -40,6 +41,11 @@ struct ContentView: View {
         .alert(isPresented: $model.hasError) {
             // エラー時にはAlertを表示する
             Alert(title: Text("データが読み込めませんでした。"))
+        }
+        .onChange(of: phase) { newPhase in
+            if newPhase == .active {
+                model.load()
+            }
         }
     }
 }
