@@ -42,7 +42,10 @@ extension TimeZone {
 // FIXME: 単位は .converted(to: .metersPerSecond) で m/s に変換されるはずだが...
 extension Wind {
     var text: String {
-        compassDirection.abbreviation + " " + speed.converted(to: .metersPerSecond).formatted()
+        String(format: "%@ %.1f%@",
+               compassDirection.abbreviation,
+               speed.converted(to: .metersPerSecond).value,
+               speed.converted(to: .metersPerSecond).unit.symbol)
         // speed.converted(to: .metersPerSecond).formatted(.measurement(width: .abbreviated).locale(Locale(identifier: "ja_JP")))
     }
 }

@@ -44,7 +44,7 @@ struct HourlyForecastView: View {
                             Text("気温")
                             Text("降水\n確率")
                             Text("風向風速")
-                            if geometry.size.width > 400 {
+                            if geometry.size.width > geometry.size.height {
                                 Text("湿度")
                                 Text("気圧")
                                 Text("視程")
@@ -61,7 +61,7 @@ struct HourlyForecastView: View {
                                     Text(item.temperature.formatted())
                                     Text("\(item.precipitationChance * 100, specifier: "%.0f%%")")
                                     Text(item.wind.text)
-                                    if geometry.size.width > 400 {
+                                    if geometry.size.width > geometry.size.height {
                                         Text("\(item.humidity * 100, specifier: "%.0f%%")")
                                         Text(item.pressure.converted(to: .hectopascals).formatted())
                                         Text(item.visibility.formatted())
