@@ -59,13 +59,13 @@ struct HourlyForecastView: View {
                                     Text(dateFormatter.string(from: item.date))
                                     Image(systemName: item.symbolName)  // 天気アイコン
                                     Text(item.temperature.formatted())
-                                    Text("\(item.precipitationChance * 100, specifier: "%.0f%%")")
+                                    Text(item.precipitationChance.formatted(.percent))
                                     Text(item.wind.text)
                                     if geometry.size.width > geometry.size.height {
-                                        Text("\(item.humidity * 100, specifier: "%.0f%%")")
+                                        Text(item.humidity.formatted(.percent))
                                         Text(item.pressure.converted(to: .hectopascals).formatted())
                                         Text(item.visibility.formatted())
-                                        Text("\(item.cloudCover * 10, specifier: "%.0f")")
+                                        Text(item.cloudCover.formatted(.number.scale(10).precision(.fractionLength(0))))
                                         Text(item.uvIndex.value.formatted())
                                     }
                                 }

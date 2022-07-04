@@ -42,6 +42,7 @@ struct DailyForecastView: View {
                         Text("最高\n気温")
                         Text("最低\n気温")
                         Text("降水\n確率")
+//                        Text("降水量")
                         Text("風向風速")
                     }.bold()
                     
@@ -51,7 +52,8 @@ struct DailyForecastView: View {
                             Image(systemName: item.symbolName)  // 天気アイコン
                             Text(item.highTemperature.formatted())
                             Text(item.lowTemperature.formatted())
-                            Text("\(item.precipitationChance * 100, specifier: "%.0f%%")")
+                            Text(item.precipitationChance.formatted(.percent))
+//                            Text(item.rainfallAmount.converted(to: .millimeters).formatted())
                             Text(item.wind.text)
                         }
                         .lineLimit(1)

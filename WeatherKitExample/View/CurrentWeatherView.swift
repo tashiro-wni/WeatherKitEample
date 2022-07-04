@@ -31,11 +31,11 @@ struct CurrentWeatherView: View {
             }
             Text("気温：" + current.temperature.formatted())
             Text("風向風速：" + current.wind.text)
-            Text("湿度：\(current.humidity * 100, specifier: "%.0f%%")")
+            Text("湿度：" + current.humidity.formatted(.percent))
             Text("気圧：" + current.pressure.converted(to: .hectopascals).formatted())
             Text("視程：" + current.visibility.formatted())
             Text("UV index：" + current.uvIndex.value.formatted())
-            Text(String(format: "雲量：%.0f", current.cloudCover * 10))
+            Text("雲量：" + current.cloudCover.formatted(.number.scale(10).precision(.fractionLength(0))))
             Spacer()
         }
     }
