@@ -21,6 +21,7 @@ struct DailyForecastView: View {
         dateFormatter.timeZone = .jst
         return dateFormatter
     }()
+    let temperatureStyle = Measurement<UnitTemperature>.FormatStyle(width: .narrow, locale: .ja_JP)   // 摂氏で表示
 
     var body: some View {
         ScrollView() {
@@ -50,9 +51,9 @@ struct DailyForecastView: View {
                         GridRow() {
                             Text(dateFormatter.string(from: item.date))
                             Image(systemName: item.symbolName)  // 天気アイコン
-                            Text(item.highTemperature.formatted())
-                            Text(item.lowTemperature.formatted())
-                            Text(item.precipitationChance.formatted(.percent))
+                            Text(item.highTemperature.formatted(temperatureStyle))  // 摂氏で表示
+                            Text(item.lowTemperature.formatted(temperatureStyle))  // 摂氏で表示
+                            Text(item.precipitationChance.formatted(.percent))  // %で表示
 //                            Text(item.rainfallAmount.converted(to: .millimeters).formatted())
                             Text(item.wind.text)
                         }

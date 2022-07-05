@@ -22,6 +22,8 @@ struct HourlyForecastView: View {
         return dateFormatter
     }()
     private let now = Date()
+    let temperatureStyle = Measurement<UnitTemperature>.FormatStyle(width: .narrow, locale: .ja_JP)   // 摂氏で表示
+    let visibilityStyle = Measurement<UnitLength>.FormatStyle(width: .narrow, locale: .ja_JP)  // kmで表示
 
     var body: some View {
         GeometryReader() { geometry in
@@ -58,13 +60,13 @@ struct HourlyForecastView: View {
                                 GridRow() {
                                     Text(dateFormatter.string(from: item.date))
                                     Image(systemName: item.symbolName)  // 天気アイコン
-                                    Text(item.temperature.formatted())
-                                    Text(item.precipitationChance.formatted(.percent))
+                                    Text(item.temperature.formatted(temperatureStyle))  // 摂氏で表示
+                                    Text(item.precipitationChance.formatted(.percent))  // %で表示
                                     Text(item.wind.text)
                                     if geometry.size.width > geometry.size.height {
-                                        Text(item.humidity.formatted(.percent))
-                                        Text(item.pressure.converted(to: .hectopascals).formatted())
-                                        Text(item.visibility.formatted())
+                                        Text(item.humidity.formatted(.percent))  // %で表示
+                                        Text(item.pressure.converted(to: .hectopascals).formatted())  // hPaで表示
+                                        Text(item.visibility.formatted(visibilityStyle))  // kmで表示
                                         Text(item.cloudCover.formatted(.number.scale(10).precision(.fractionLength(0))))
                                         Text(item.uvIndex.value.formatted())
                                     }

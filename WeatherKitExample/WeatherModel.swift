@@ -45,6 +45,8 @@ extension Wind {
                compassDirection.abbreviation,
                speed.converted(to: .metersPerSecond).value,
                speed.converted(to: .metersPerSecond).unit.symbol)
-        // speed.converted(to: .metersPerSecond).formatted(.measurement(width: .abbreviated).locale(Locale(identifier: "ja_JP")))
+
+//        let windSpeedStyle = Measurement<UnitSpeed>.FormatStyle(width: .narrow, locale: .ja_JP)
+//        return compassDirection.abbreviation + " " + speed.converted(to: .metersPerSecond).formatted()  // m/s への変換が機能しない
     }
 }
