@@ -17,32 +17,38 @@ struct ContentView: View {
             if let weather = model.weather {
                 NavigationView {
                     List {
-                        NavigationLink(destination: CurrentWeatherView(current: weather.currentWeather)
-                            .navigationTitle(Text("現在の天気"))
-                        ) {
-                            Text("現在の天気")
-                        }
-                        NavigationLink(destination: HourlyForecastView(hourlyForecast: weather.hourlyForecast)
-                            .navigationTitle(Text("１時間ごとの天気"))
-                        ) {
-                            Text("１時間ごとの天気")
-                        }
-                        NavigationLink(destination: DailyForecastView(dailyForecast: weather.dailyForecast)
-                            .navigationTitle(Text("週間予報"))
-                        ) {
-                            Text("週間予報")
-                        }
-
-                        // ロゴ・data source
-                        if let attribution = model.attribution {
-                            Link(destination: attribution.legalPageURL) {
-                                AsyncImage(url: attribution.squareMarkURL) { image in
-                                    image
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(height: 120)
-                                } placeholder: {
-                                    ProgressView()
+                        Section {
+                            NavigationLink(destination: CurrentWeatherView(current: weather.currentWeather)
+                                .navigationTitle(Text("現在の天気"))
+                            ) {
+                                Text("現在の天気")
+                            }
+                            NavigationLink(destination: HourlyForecastView(hourlyForecast: weather.hourlyForecast)
+                                .navigationTitle(Text("１時間ごとの天気"))
+                            ) {
+                                Text("１時間ごとの天気")
+                            }
+                            NavigationLink(destination: DailyForecastView(dailyForecast: weather.dailyForecast)
+                                .navigationTitle(Text("週間予報"))
+                            ) {
+                                Text("週間予報")
+                            }
+                        } footer: {
+                            // ロゴ・data source
+                            if let attribution = model.attribution {
+                                Link(destination: attribution.legalPageURL) {
+                                    HStack() {
+                                        Spacer()
+                                        AsyncImage(url: attribution.squareMarkURL) { image in
+                                            image
+                                                .resizable()
+                                                .scaledToFit()
+                                                .frame(height: 120)
+                                        } placeholder: {
+                                            ProgressView()
+                                        }
+                                        Spacer()
+                                    }
                                 }
                             }
                         }
