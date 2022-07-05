@@ -32,6 +32,20 @@ struct ContentView: View {
                         ) {
                             Text("週間予報")
                         }
+
+                        // ロゴ・data source
+                        if let attribution = model.attribution {
+                            Link(destination: attribution.legalPageURL) {
+                                AsyncImage(url: attribution.squareMarkURL) { image in
+                                    image
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(height: 120)
+                                } placeholder: {
+                                    ProgressView()
+                                }
+                            }
+                        }
                     }
                 }
             } else {
