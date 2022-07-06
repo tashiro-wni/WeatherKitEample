@@ -24,6 +24,7 @@ struct HourlyForecastView: View {
     private let now = Date()
     let temperatureStyle = Measurement<UnitTemperature>.FormatStyle(width: .narrow, locale: .ja_JP)   // 摂氏で表示
     let visibilityStyle = Measurement<UnitLength>.FormatStyle(width: .narrow, locale: .ja_JP)  // kmで表示
+    let pressureStyle = Measurement<UnitPressure>.FormatStyle(width: .narrow, numberFormatStyle: .number.precision(.fractionLength(0)))  // hPa, 整数部のみ表示
 
     var body: some View {
         GeometryReader() { geometry in
@@ -65,7 +66,7 @@ struct HourlyForecastView: View {
                                     Text(item.wind.text)
                                     if geometry.size.width > geometry.size.height {
                                         Text(item.humidity.formatted(.percent))  // %で表示
-                                        Text(item.pressure.converted(to: .hectopascals).formatted())  // hPaで表示
+                                        Text(item.pressure.converted(to: .hectopascals).formatted(pressureStyle))  // hPaで表示
                                         Text(item.visibility.formatted(visibilityStyle))  // kmで表示
                                         Text(item.cloudCover.formatted(.number.scale(10).precision(.fractionLength(0))))
                                         Text(item.uvIndex.value.formatted())

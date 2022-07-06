@@ -22,13 +22,15 @@ struct CurrentWeatherView: View {
 //        return dateFormatter
 //    }()
 
+    let dateStyle = Date.FormatStyle(date: .numeric, time: .shortened, locale: .ja_JP, calendar: Calendar(identifier: .gregorian), timeZone: .jst!)
     let temperatureStyle = Measurement<UnitTemperature>.FormatStyle(width: .narrow, locale: .ja_JP)   // 摂氏で表示
     let visibilityStyle = Measurement<UnitLength>.FormatStyle(width: .narrow, locale: .ja_JP)  // kmで表示
+    let pressureStyle = Measurement<UnitPressure>.FormatStyle(width: .narrow, locale: .ja_JP, numberFormatStyle: .number.precision(.fractionLength(0)))  // hPa, 整数部のみ表示
 
     var body: some View {
         VStack(alignment: .leading) {
 //            Text("日時：" + dateFormatter.string(from: current.date))
-            Text("日時：" + current.date.formatted(Date.FormatStyle(date: .numeric, time: .shortened, locale: .ja_JP, calendar: Calendar(identifier: .gregorian), timeZone: .jst!)))
+            Text("日時：" + current.date.formatted(dateStyle))
             HStack {
                 Text("天気：" + current.condition.description)
                 Image(systemName: current.symbolName)  // 天気アイコン
@@ -36,7 +38,7 @@ struct CurrentWeatherView: View {
             Text("気温：" + current.temperature.formatted(temperatureStyle))  // 摂氏で表示
             Text("風向風速：" + current.wind.text)
             Text("湿度：" + current.humidity.formatted(.percent))  // %で表示
-            Text("気圧：" + current.pressure.converted(to: .hectopascals).formatted())  // hPaで表示
+            Text("気圧：" + current.pressure.converted(to: .hectopascals).formatted(pressureStyle))  // hPaで表示
             Text("視程：" + current.visibility.formatted(visibilityStyle))  // kmで表示
             Text("UV index：" + current.uvIndex.value.formatted())
             Text("雲量：" + current.cloudCover.formatted(.number.scale(10).precision(.fractionLength(0))))
