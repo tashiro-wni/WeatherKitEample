@@ -92,7 +92,7 @@ private struct DailyChartView: View {
                 )
                 .foregroundStyle(.red)
             }
-            .chartYScale(domain: min ... max)
+            .chartYScale(domain: floor(min) ... ceil(max))
             .chartXAxis {  // X軸の表記を定義
                 AxisMarks(values: .stride(by: .day)) { value in
                     AxisGridLine()

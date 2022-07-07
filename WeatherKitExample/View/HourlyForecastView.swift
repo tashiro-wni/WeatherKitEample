@@ -100,7 +100,7 @@ private struct HourlyChartView: View {
                     .foregroundStyle(.red)
                 }
             }
-            .chartYScale(domain: min ... max)
+            .chartYScale(domain: floor(min) ... ceil(max))
             .chartXAxis {  // X軸の表記を定義
                 AxisMarks(values: .stride(by: .day)) { _ in
                     AxisGridLine()
